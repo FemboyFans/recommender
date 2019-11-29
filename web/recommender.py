@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask, jsonify, request
-from flask_basicauth import BasicAuth
 from implicit.als import AlternatingLeastSquares
 import numpy as np
 from scipy.sparse import coo_matrix, load_npz
@@ -30,18 +29,9 @@ def load_model():
   _last_loaded = datetime.datetime.now()
 
 app = Flask("recommender")
-app.config["BASIC_AUTH_USERNAME"] = "danbooru"
-app.config["BASIC_AUTH_PASSWORD"] = os.environ.get("RECOMMENDER_KEY")
-basic_auth = BasicAuth(app)
 load_model()
 
-@app.after_request
-def set_cors(response):
-  response.headers["Access-Control-Allow-Origin"] = "*"
-  return response
-
 @app.route("/recommend/<int:user_id>")
-@basic_auth.required
 def recommend(user_id):
   global _csr
   global _model
@@ -55,7 +45,6 @@ def recommend(user_id):
   return jsonify(matches)
 
 @app.route("/similar/<int:post_id>")
-@basic_auth.required
 def similar(post_id):
   global _model
   global _posts_to_id

@@ -5,7 +5,6 @@ scipy==1.2.0
 python-dotenv
 numpy==1.16.0
 Flask
-Flask-BasicAuth
 gunicorn
 sklearn
 boto3
