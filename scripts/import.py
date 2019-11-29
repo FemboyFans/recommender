@@ -23,15 +23,6 @@ ALS_FACTORS = 128
 ALS_REGULARIZATION = 1e-2
 ALS_ITERATIONS = 15
 
-def query_csv(year, month):
-  path = "/tmp/favorites-{year}-{month:02d}-01.csv".format(year=year, month=month)
-  data = pd.read_csv(path, header=None, names=["post_id", "user_id"])
-  try:
-    os.makedirs(MATRIX_PATH + "/favs/{year}".format(year=year))
-  except os.error:
-    None
-  data.to_pickle(MATRIX_PATH + "/favs/{year}/{month}.pickle".format(year=year, month=month))
-
 def query_gbq(year, month):
   start = '{year}-{month:02d}-01 00:00:00'.format(year=year, month=month)
   stop = "{year}-{month:02d}-{eod} 23:59:59".format(year=year, month=month, eod=calendar.monthrange(year, month)[1])
@@ -42,10 +33,6 @@ def query_gbq(year, month):
   except os.error:
     None
   data.to_pickle(MATRIX_PATH + "/favs/{year}/{month}.pickle".format(year=year, month=month))
-
-def seed_gbq():
-  for month in range(8, 9):
-    query_gbq(2018, month)
 
 def train_model():
   model = AlternatingLeastSquares(
