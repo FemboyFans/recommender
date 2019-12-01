@@ -1,0 +1,10 @@
+#!/bin/sh
+
+systemd-run \
+  --user \
+  --collect \
+  --unit=retrain-recommender \
+  --on-calendar=0/04:00:00 \
+  -p WorkdingDirectory=/var/www/recommender \
+  -p CPUQuota=400% \
+  /bin/sh -c "python3 -m poetry run bin/train && systemctl restart recommender"

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+systemd-run \
+  --user \
+  --collect \
+  --unit=recommender \
+  -p Restart=always \
+  -p WorkingDirectory=/var/www/recommender \
+  -p EnvironmentFile=/var/www/recommender/.env \
+  /usr/bin/env python3 -m poetry run gunicorn wsgi
