@@ -1,9 +1,7 @@
 import os
-from dotenv import load_dotenv, find_dotenv
 from flask import Flask, jsonify, request
 from recommender import Recommender
 
-load_dotenv(find_dotenv())
 application = Flask("recommender")
 recommender = Recommender.load(os.environ.get("MODEL_PATH"))
 

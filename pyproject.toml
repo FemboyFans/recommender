@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "danbooru-recommender"
+version = "1.0"
+description = "Danbooru recommendation engine"
+authors = ["Albert Yi <r888888888@gmail.com>", "evazion <noizave@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+implicit = "^0.4"
+pandas = "^0.25"
+scipy = "^1.3"
+numpy = "^1.17"
+Flask = "^1.1"
+gunicorn = "^20.0"
+python-dotenv = "^0.10"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
