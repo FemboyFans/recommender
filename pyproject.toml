@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "danbooru-recommender"
+name = "recommender"
 version = "1.0"
 description = "Danbooru recommendation engine"
 authors = ["Albert Yi <r888888888@gmail.com>", "evazion <noizave@gmail.com>"]
