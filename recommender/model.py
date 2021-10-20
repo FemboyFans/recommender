@@ -1,4 +1,6 @@
 import os
+import sys
+import subprocess
 import pickle
 import pandas as pd
 import numpy as np
@@ -48,8 +50,7 @@ class Recommender:
       LIMIT {self.MAX_FAVS}
     """
 
-    cmd = f"psql --quiet --no-psqlrc -c '\copy ({query}) TO STDOUT WITH (FORMAT CSV)' {self.DATABASE_URL} > {self.FAVS_PATH}"
-    os.system(cmd)
+    self.shell(f"psql --no-psqlrc -c '\copy ({query}) TO STDOUT WITH (FORMAT CSV)' {self.DATABASE_URL} > {self.FAVS_PATH}")
 
   def load_favorites(self):
     favs_df = pd.read_csv(self.FAVS_PATH, dtype=np.int32, names=["post_id", "user_id"])
@@ -94,3 +95,6 @@ class Recommender:
   def save(self, model_path):
     with open(model_path, "wb") as file:
       pickle.dump(self, file)
+
+  def shell(self, cmd):
+    subprocess.run(cmd, stdout=sys.stdout, stderr=sys.stderr, shell=True, check=True)
