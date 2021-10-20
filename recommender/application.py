@@ -3,7 +3,8 @@ from flask import Flask, jsonify, request
 from recommender import Recommender
 
 application = Flask("recommender")
-recommender = Recommender.load(os.environ.get("MODEL_PATH"))
+model_path = os.environ.get("MODEL_PATH", "data/recommender.pickle")
+recommender = Recommender.load(model_path)
 
 @application.route("/recommend/<int:user_id>")
 def recommend(user_id):
