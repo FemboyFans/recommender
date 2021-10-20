@@ -3,7 +3,7 @@ WORKDIR /recommender
 
 RUN \
   apt-get update && \
-  apt-get install -y --no-install-recommends tini
+  apt-get install -y --no-install-recommends tini postgresql-client
 
 RUN \
   pip install --upgrade pip && \
