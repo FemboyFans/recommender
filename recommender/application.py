@@ -17,3 +17,8 @@ def similar(post_id):
   limit = int(request.args.get('limit', 50))
   recommendations = recommender.recommend_for_post(post_id, limit)
   return jsonify(recommendations)
+
+@application.route("/metrics")
+def metrics():
+  metrics = "\n".join([f"{k} {v}" for k, v in recommender.metrics().items()])
+  return (metrics, 200)

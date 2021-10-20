@@ -92,6 +92,14 @@ class Recommender:
     recommendations = [(self.ids_to_post[id], float(score)) for id, score in recommendations]
     return recommendations
 
+  def metrics(self):
+    return {
+      "user_count": len(self.users_to_id),
+      "post_count": len(self.posts_to_id),
+      "model_size": 4 * self.model.factors * (len(self.users_to_id) + len(self.posts_to_id)),
+      "factors": self.model.factors,
+    }
+
   def save(self, model_path):
     with open(model_path, "wb") as file:
       pickle.dump(self, file)
