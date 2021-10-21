@@ -2,8 +2,10 @@ import os
 import sys
 import subprocess
 import pickle
+import time
 import pandas as pd
 import numpy as np
+from datetime import datetime
 from scipy.sparse import csr_matrix
 from implicit.als import AlternatingLeastSquares
 
@@ -71,8 +73,14 @@ class Recommender:
       iterations=self.ALS_ITERATIONS
     )
 
+    start = time.monotonic()
     self.model.fit(self.favorites)
+    end = time.monotonic()
+    dur = int(end - start)
+
     self.favorites = None
+    self.trained_at = datetime.utcnow().isoformat()
+    self.training_time = "{:02d}:{:02d}:{:02d}".format(dur // 3600, (dur % 3600 // 60), dur % 60)
 
   def recommend_for_user(self, user_id, limit=50):
     if not user_id in self.users_to_id:
@@ -96,8 +104,10 @@ class Recommender:
     return {
       "user_count": len(self.users_to_id),
       "post_count": len(self.posts_to_id),
-      "model_size": 4 * self.model.factors * (len(self.users_to_id) + len(self.posts_to_id)),
       "factors": self.model.factors,
+      "model_size": 4 * self.model.factors * (len(self.users_to_id) + len(self.posts_to_id)),
+      "trained_at": self.trained_at,
+      "training_time": self.training_time,
     }
 
   def save(self, model_path):
