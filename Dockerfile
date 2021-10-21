@@ -1,18 +1,31 @@
 FROM python:3.7.12
 WORKDIR /recommender
 
-RUN \
-  apt-get update && \
-  apt-get install -y --no-install-recommends tini postgresql-client
+# https://github.com/python-poetry/poetry/discussions/1879#discussioncomment-216865
+ENV \
+  # https://stackoverflow.com/questions/59812009/what-is-the-use-of-pythonunbuffered-in-docker-file
+  PYTHONUNBUFFERED=1 \
+  # https://python-docs.readthedocs.io/en/latest/writing/gotchas.html#disabling-bytecode-pyc-files
+  PYTHONDONTWRITEBYTECODE=1 \
+  # https://stackoverflow.com/questions/45594707/what-is-pips-no-cache-dir-good-for
+  PIP_NO_CACHE_DIR=1 \
+  # https://stackoverflow.com/questions/46288847/how-to-suppress-pip-upgrade-warning
+  PIP_DISABLE_PIP_VERSION_CHECK=1
 
 RUN \
-  pip install --upgrade pip && \
+  groupadd --gid 999 recommender && \
+  useradd --gid 999 --uid 999 --create-home recommender && \
+  chown recommender:recommender /recommender && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends tini postgresql-client && \
   pip install "poetry==1.1.11"
 
+USER recommender
 COPY pyproject.toml poetry.lock ./
-RUN poetry install
+RUN poetry install --no-dev
 
 COPY . .
 
+EXPOSE 5000
 ENTRYPOINT ["tini", "--"]
-CMD ["python", "-m", "poetry", "run", "gunicorn", "wsgi"]
+CMD ["python", "-m", "poetry", "run", "gunicorn", "wsgi", "--bind", "0.0.0.0:5000"]
