@@ -11,6 +11,7 @@ from implicit.als import AlternatingLeastSquares
 
 class Recommender:
   def __init__(self, **args):
+    self.TRAINING_THREADS = int(args.get("training_threads", os.cpu_count()))
     self.ALS_FACTORS = args.get("als_factors", 128)
     self.ALS_REGULARIZATION = args.get("als_regularization", 1e-2)
     self.ALS_ITERATIONS = args.get("als_iterations", 15)
@@ -68,6 +69,7 @@ class Recommender:
     self.model = AlternatingLeastSquares(
       calculate_training_loss=True,
       dtype=np.float32,
+      num_threads=self.TRAINING_THREADS,
       factors=self.ALS_FACTORS,
       regularization=self.ALS_REGULARIZATION,
       iterations=self.ALS_ITERATIONS
