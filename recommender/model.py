@@ -20,7 +20,7 @@ class Recommender:
     self.MAX_FAVS = args.get("max_favs", 1e12)
     self.FAVS_PATH = args.get("favs_path", "data/favs.csv")
     self.MODEL_PATH = args.get("model_path", "data/recommender.pickle")
-    self.DATABASE_URL = args.get("database_url", "postgresql://localhost/danbooru2")
+    self.DATABASE_URL = args.get("database_url", "postgresql://pawsmovin:@postgres/pawsmovin_development")
 
   @staticmethod
   def create(**args):
@@ -48,7 +48,7 @@ class Recommender:
       FROM favorites
       WHERE
         post_id IN (SELECT id FROM posts WHERE fav_count > {self.MIN_POST_FAVS})
-        AND user_id IN (SELECT id FROM users WHERE favorite_count > {self.MIN_USER_FAVS})
+        AND user_id IN (SELECT users.id FROM users INNER JOIN user_statuses ON user_statuses.user_id = users.id WHERE user_statuses.favorite_count > {self.MIN_USER_FAVS})
       ORDER BY post_id DESC
       LIMIT {self.MAX_FAVS}
     """

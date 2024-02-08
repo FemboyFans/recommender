@@ -12,15 +12,10 @@ ENV \
   # https://stackoverflow.com/questions/46288847/how-to-suppress-pip-upgrade-warning
   PIP_DISABLE_PIP_VERSION_CHECK=1
 
-RUN \
-  groupadd --gid 999 recommender && \
-  useradd --gid 999 --uid 999 --create-home recommender && \
-  chown recommender:recommender /recommender && \
-  apt-get update && \
+RUN apt-get update && \
   apt-get install -y --no-install-recommends tini postgresql-client && \
   pip install "poetry==1.1.11"
 
-USER recommender
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-dev
 
