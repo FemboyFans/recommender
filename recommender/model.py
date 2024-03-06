@@ -48,7 +48,7 @@ class Recommender:
       FROM favorites
       WHERE
         post_id IN (SELECT id FROM posts WHERE fav_count > {self.MIN_POST_FAVS})
-        AND user_id IN (SELECT users.id FROM users INNER JOIN user_statuses ON user_statuses.user_id = users.id WHERE user_statuses.favorite_count > {self.MIN_USER_FAVS})
+        AND user_id IN (SELECT id FROM users WHERE favorite_count > {self.MIN_USER_FAVS})
       ORDER BY post_id DESC
       LIMIT {self.MAX_FAVS}
     """
