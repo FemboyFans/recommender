@@ -3,7 +3,7 @@ name: Docker Build
 on:
   push:
     branches:
-    - master
+      - master
   workflow_dispatch:
 
 permissions:
@@ -13,7 +13,7 @@ permissions:
 jobs:
   docker-build:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'PawsMovin'
+    if: github.repository_owner == 'femboyfans'
 
     steps:
       - name: Publish to ghcr

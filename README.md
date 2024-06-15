@@ -1,6 +1,6 @@
 # Recommender
 
-Post recommendation service for Danbooru.
+Post recommendation service for [FemboyFans](https://github.com/FemboyFans/FemboyFans).
 
 # Quickstart
 
