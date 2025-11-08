@@ -105,5 +105,4 @@ venv.bak/
 
 /data
 !/data/.gitkeep
-!/data/empty.pickle
 .idea

@@ -7,7 +7,7 @@ from multiprocessing import Process, Value
 application = Flask("recommender")
 model_path = os.environ.get("MODEL_PATH", "data/recommender.pickle")
 if not os.path.exists(model_path):
-    shutil.copyfile("data/empty.pickle", model_path)
+    shutil.copyfile("empty.pickle", model_path)
 
 recommender = Recommender.load(model_path)
 reload = Value("b", False)
